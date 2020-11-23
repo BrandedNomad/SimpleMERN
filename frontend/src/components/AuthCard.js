@@ -1,10 +1,12 @@
 import React,{useState} from 'react';
 import {Link} from "react-router-dom";
 
-function LoginCard({toggle}){
+function AuthCard({toggle}){
 
-    let [email,setEmail] = useState('')
-    let [password, setPassword]= useState('')
+    let [email,setEmail] = useState('');
+    let [password, setPassword]= useState('');
+    let [confirmPassword,setconfirmPassword] = useState('')
+    let [name,setName] = useState('')
 
     const handleEmailChange = (event) =>{
         event.preventDefault()
@@ -16,14 +18,32 @@ function LoginCard({toggle}){
         setPassword(event.target.value)
     }
 
+    const handleNameChange = (event) =>{
+        event.preventDefault()
+        setName(event.target.value)
+    }
+
+    const handleConfirmPasswordChange = (event)=>{
+        event.preventDefault()
+        setconfirmPassword(event.target.value);
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        const logDetails = {
-            email,
-            password
+        let authDetails ={}
+
+        if(confirmPassword === password){
+            authDetails = {
+                name,
+                email,
+                password
+            }
+        }else{
+            alert("Passwords don't match")
         }
 
-        console.log(logDetails.email,logDetails.password)
+
+        console.log(authDetails.name,authDetails.email,authDetails.password)
     }
 
     return (
@@ -34,6 +54,15 @@ function LoginCard({toggle}){
                     handleSubmit(event)
                 }}
             >
+                <input
+                    className='login-input'
+                    type='text'
+                    value={name}
+                    placeholder={'Name'}
+                    onChange={(event)=>{
+                        handleNameChange(event)
+                    }}
+                />
                 <input
                     className='login-input'
                     type='text'
@@ -52,21 +81,30 @@ function LoginCard({toggle}){
                         handlePasswordChange(event)
                     }}
                 />
+                <input
+                    className='login-input'
+                    type='text'
+                    value={confirmPassword}
+                    placeholder={'Confirm Password'}
+                    onChange={(event)=>{
+                        handleConfirmPasswordChange(event)
+                    }}
+                />
                 <button
                     className='primary-button'
                     type="submit"
                 >
-                    Login
+                    Create Account
                 </button>
             </form>
             <Link
                 onClick={toggle}
                 className='tertiary-button'
             >
-                Don't have an account?
+                Already have an account?
             </Link>
         </div>
     )
 }
 
-export default LoginCard;
+export default AuthCard;

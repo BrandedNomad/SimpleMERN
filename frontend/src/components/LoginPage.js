@@ -1,16 +1,36 @@
-import React from 'react';
+import React,{useState} from 'react';
 import LoginCard from "./LoginCard";
+import AuthCard from "./AuthCard";
 
 
 function LoginPage(){
-    return (
-        <div
-            className='loginPage-container'
-        >
-            <LoginCard/>
 
-        </div>
-    )
+    let [login,setLogin] = useState(true)
+
+    const handleToggle = ()=>{
+        setLogin(!login)
+    }
+
+    if(login){
+        return (
+            <div
+                className='loginPage-container'
+            >
+                <LoginCard toggle={handleToggle}/>
+            </div>
+        )
+    }else{
+        return (
+            <div
+                className='loginPage-container'
+            >
+                <AuthCard toggle={handleToggle}/>
+
+            </div>
+        )
+    }
+
+
 }
 
 
