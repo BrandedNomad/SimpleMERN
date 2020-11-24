@@ -12,7 +12,6 @@ function App() {
           <Route exact path={'/'} component={LoginPage}/>
           <Route path={'/profile'} component={ProfileCard}/>
       </BrowserRouter>
-
     </div>
   );
 }

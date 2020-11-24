@@ -25,6 +25,20 @@ body {
   background-color: black;
   color:white;
   margin:10px;
+  border:none;
+
+}
+
+.primary-button:hover {
+  background-color: rebeccapurple;
+  border:none;
+  user-focus: none;
+}
+
+.primary-button:active {
+  background-color: mediumpurple;
+  border:none;
+  user-focus: none;
 }
 
 .tertiary-button {
@@ -32,6 +46,10 @@ body {
   margin:10px;
   color:rebeccapurple;
   text-decoration: none;
+}
+
+.tertiary-button:hover {
+  color:purple;
 }
 
 .login-input {
