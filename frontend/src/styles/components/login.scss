@@ -1,0 +1,16 @@
+.login-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border:1px solid #c4c4c4;
+  border-radius:5px;
+  box-shadow: #c4c4c4 5px 5px;
+}
+
+.login-form {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

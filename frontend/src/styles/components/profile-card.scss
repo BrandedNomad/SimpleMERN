@@ -1,0 +1,60 @@
+
+.profilecard-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border:1px solid #c4c4c4;
+  border-radius: 5px;
+  box-shadow: #c4c4c4 5px 5px;
+}
+
+.profilecard-content-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin:20px;
+}
+
+.profilecard-avatar-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profilecard-avatar_img {
+  width:200px;
+  border-radius: 5px;
+  margin:20px;
+}
+
+
+.profilecard-info-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+
+}
+
+.profilecard-info_name {
+  font-size: 30px;
+  font-weight: 600;
+  margin:0;
+}
+
+.profilecard-info_email {
+  font-size:30px;
+  margin:0;
+
+}
+
+.profilecard-button-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
