@@ -25,7 +25,7 @@ server.use(function(req,res,next){
 })
 
 //Setting up Root URI call
-server.use('/api/v0/', indexRouter);
+server.use('/api/' + process.env.ROUTE_VERSION + '/', indexRouter);
 
 
 //Starting the server
