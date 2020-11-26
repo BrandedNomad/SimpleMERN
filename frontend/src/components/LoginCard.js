@@ -59,12 +59,12 @@ function LoginCard({toggle}){
                     Login
                 </button>
             </form>
-            <Link
+            <span
                 onClick={toggle}
                 className='tertiary-button'
             >
                 Don't have an account?
-            </Link>
+            </span>
         </div>
     )
 }

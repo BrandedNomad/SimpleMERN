@@ -1,9 +1,11 @@
 import React,{useState} from 'react';
-import {Link} from "react-router-dom";
 import {createAccount} from "../api/api";
 import {Redirect} from "react-router-dom";
+import {connect} from 'react-redux'
 
-function AuthCard({toggle}){
+import {loginAction} from "../store/actions/loginAction";
+
+function AuthCard({toggle,dispatch}){
 
     let [email,setEmail] = useState('');
     let [password, setPassword]= useState('');
@@ -37,6 +39,10 @@ function AuthCard({toggle}){
         if(confirmPassword === password){
             createAccount(name,email,password,(result)=>{
                 setUser(result)
+                console.log(result)
+                dispatch(loginAction(result.user._id,result.token))
+            }).catch((error)=>{
+                console.log(error)
             })
 
         }else{
@@ -101,14 +107,19 @@ function AuthCard({toggle}){
                     Create Account
                 </button>
             </form>
-            <Link
+            <span
                 onClick={toggle}
                 className='tertiary-button'
             >
                 Already have an account?
-            </Link>
+            </span>
         </div>
     )
 }
 
-export default AuthCard;
+function mapStateToProps(state){
+    return state
+
+}
+
+export default connect(mapStateToProps)(AuthCard);

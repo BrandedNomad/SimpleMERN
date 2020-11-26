@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {Link} from "react-router-dom";
-import ReactDOM from 'react-dom'
+
 
 import Modal from "./Modal";
 
@@ -48,12 +48,12 @@ function ProfileCard(){
                         >
                             Logout
                         </button>
-                        <Link
+                        <span
                             onClick={handleToggleModal}
                             className='tertiary-button'
                         >
                             Delete
-                        </Link>
+                        </span>
                     </div>
 
                 </div>

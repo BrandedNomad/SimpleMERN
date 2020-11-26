@@ -4,7 +4,13 @@
     <list default="true" id="5cd1c4a9-c7e5-4881-9f79-65e74fe75bfb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/v0/users/routes/user.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/v0/users/routes/user.router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/AuthCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/AuthCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/LoginCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/LoginCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/ProfileCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/ProfileCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/styles/base/baseStyles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/styles/base/baseStyles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +55,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1606207453922</updated>
-      <workItem from="1606207455208" duration="28005000" />
+      <workItem from="1606207455208" duration="29659000" />
     </task>
     <servers />
   </component>
