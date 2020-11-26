@@ -1,12 +1,15 @@
 import React,{useState} from 'react';
 import {Link} from "react-router-dom";
+import {createAccount} from "../api/api";
+import {Redirect} from "react-router-dom";
 
 function AuthCard({toggle}){
 
     let [email,setEmail] = useState('');
     let [password, setPassword]= useState('');
-    let [confirmPassword,setconfirmPassword] = useState('')
+    let [confirmPassword, setconfirmPassword] = useState('')
     let [name,setName] = useState('')
+    let [user, setUser]= useState(undefined)
 
     const handleEmailChange = (event) =>{
         event.preventDefault()
@@ -30,20 +33,21 @@ function AuthCard({toggle}){
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        let authDetails ={}
 
         if(confirmPassword === password){
-            authDetails = {
-                name,
-                email,
-                password
-            }
+            createAccount(name,email,password,(result)=>{
+                setUser(result)
+            })
+
         }else{
             alert("Passwords don't match")
         }
 
+    }
 
-        console.log(authDetails.name,authDetails.email,authDetails.password)
+    if(user !== undefined){
+        console.log(user)
+        return <Redirect to={'/profile'}/>
     }
 
     return (
