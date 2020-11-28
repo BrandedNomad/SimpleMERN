@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {connect} from 'react-redux';
-import {handleLogout} from "../store/actions/loginAction";
+import {handleLogout, handleGetProfile} from "../store/actions/loginAction";
 
 import Modal from "./Modal";
 
@@ -14,6 +14,16 @@ const userProfile = {
 function ProfileCard({uid,token,dispatch}){
 
     const [isOpen, setIsOpen] = useState(false)
+    const [profile,setProfile] = useState({})
+
+
+    useEffect(()=>{
+        dispatch(handleGetProfile(token,setProfile))
+    },[])
+
+    console.log("this",profile)
+
+
 
     const handleToggleModal = () =>{
         setIsOpen(!isOpen)
@@ -22,11 +32,11 @@ function ProfileCard({uid,token,dispatch}){
     return (
         <React.Fragment>
             {isOpen && <Modal toggle={handleToggleModal}/>}
-            <div className='profilecard-container'>
+            {profile.user !== undefined ? <div className='profilecard-container'>
                 <div className='profilecard-avatar-container'>
                     <img
                         className='profilecard-avatar_img'
-                        src={userProfile.avatar}
+                        src={profile.signedURL !== undefined ? profile.signedURL : './img/loading-spinner.gif'}
                         alt='profile-avatar'
                     />
                 </div>
@@ -35,12 +45,12 @@ function ProfileCard({uid,token,dispatch}){
                         <p
                             className='profilecard-info_name'
                         >
-                            {userProfile.name}
+                            {profile.user.name}
                         </p>
                         <p
                             className='profilecard-info_email'
                         >
-                            {userProfile.email}
+                            {profile.user.email}
                         </p>
                     </div>
                     <div className='profilecard-button-container'>
@@ -62,7 +72,7 @@ function ProfileCard({uid,token,dispatch}){
 
                 </div>
 
-            </div>
+            </div> : <img src='./img/loading-spinner.gif' alt='loading'/>}
 
         </React.Fragment>
 

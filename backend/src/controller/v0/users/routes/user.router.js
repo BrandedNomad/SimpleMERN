@@ -2,6 +2,7 @@ const Express = require('express')
 const User = require('../models/User')
 const ModelV0 = require("../../index.model")
 const auth = require('../../../../middleware/auth')
+const {getPutSignedUrl,getSignedUrl,deleteFiles} = require('../../../../aws')
 
 
 //Creating a router
@@ -13,17 +14,26 @@ router.post("/register", async (req,res)=>{
     //get user provided details
     const userProvided = req.body
 
-    //Check if user allready exist
+    //Check if user already exist
     const doesExist = await ModelV0.User.findByCredentials(userProvided.email,userProvided.password)
 
     let user;
     let token;
+    let signedURL;
     //instantiate new User
     if(doesExist === false){
+
+        //create user
         user = await new ModelV0.User(req.body)
-        //upload image to filestore
+
+        //create a token
         token = await user.generateAuthToken()
-        res.status(200).send({user,token})
+
+        //request put url
+        signedURL = getPutSignedUrl(req.body.avatar)
+
+        //send results
+        res.status(200).send({user,token,signedURL})
     } else {
         res.status(400).send("User not found")
     }
@@ -48,10 +58,17 @@ router.post("/auth",async (req,res)=>{
 })
 
 //Gets a user by id
-router.get('/:id',auth,async (req,res)=>{
-    const _id = req.params.id
-    const user = await ModelV0.User.findOne({_id})
-    res.send(user)
+router.get('/profile',auth,async (req,res)=>{
+    const user = req.user
+    console.log("profileRoute", user)
+    //const user = await ModelV0.User.findOne({_id})
+    if(user !== undefined){
+        const signedURL = getSignedUrl(user.avatar)
+        console.log("profileSigned", signedURL)
+
+        res.send({user,signedURL})
+    }
+
 })
 
 //logs out user
@@ -75,6 +92,7 @@ router.post('/logout', auth, async(req,res)=>{
 router.delete('/delete',auth,async(req,res)=>{
     try{
 
+        deleteFiles(req.user.avatar)
         const deletedUser = await User.findByIdAndDelete(req.user._id)
         if(!deletedUser){
             res.status(404).send()
