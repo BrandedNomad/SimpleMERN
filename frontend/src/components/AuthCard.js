@@ -37,7 +37,7 @@ function AuthCard({toggle,dispatch}){
         event.preventDefault()
 
         if(confirmPassword === password){
-            dispatch(handleAccountCreation(name,email,password,setUser))
+            dispatch(handleAccountCreation(name,email,password,avatarImage,setUser))
 
         }else{
             alert("Passwords don't match")
