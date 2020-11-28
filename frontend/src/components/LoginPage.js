@@ -25,7 +25,6 @@ function LoginPage(){
                 className='loginPage-container'
             >
                 <AuthCard toggle={handleToggle}/>
-
             </div>
         )
     }

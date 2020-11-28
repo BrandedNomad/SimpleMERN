@@ -1,12 +1,17 @@
 import React,{useState} from 'react';
-import {Link} from "react-router-dom";
+import {handleAccountCreation} from '../store/actions/loginAction'
+import {Redirect} from "react-router-dom";
+import {connect} from 'react-redux'
 
-function AuthCard({toggle}){
+function AuthCard({toggle,dispatch}){
 
     let [email,setEmail] = useState('');
     let [password, setPassword]= useState('');
-    let [confirmPassword,setconfirmPassword] = useState('')
+    let [confirmPassword, setconfirmPassword] = useState('')
     let [name,setName] = useState('')
+    let [user, setUser]= useState(undefined)
+    let [avatarImage,setAvatarImage] = useState({})
+    let [isUploaded,setIsUploaded] = useState(false)
 
     const handleEmailChange = (event) =>{
         event.preventDefault()
@@ -30,20 +35,48 @@ function AuthCard({toggle}){
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        let authDetails ={}
 
         if(confirmPassword === password){
-            authDetails = {
-                name,
-                email,
-                password
-            }
+            dispatch(handleAccountCreation(name,email,password,setUser))
+
         }else{
             alert("Passwords don't match")
         }
 
+    }
 
-        console.log(authDetails.name,authDetails.email,authDetails.password)
+    if(user !== undefined){
+        return <Redirect to={'/profile'}/>
+    }
+
+    const updateThumbnail=(dropZoneElement,file)=>{
+        setAvatarImage(file)
+
+        const thumbnailElement = document.createElement('div')
+        thumbnailElement.classList.add('drop-zone__thumb')
+
+        dropZoneElement.appendChild(thumbnailElement)
+
+        const thumbnail = dropZoneElement.children[2]
+
+
+        //show thumbnail for image files
+        if(file.type.startsWith("image/")){
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                thumbnail.style.backgroundImage = `url('${reader.result}')`
+            }
+        } else {
+            thumbnail.style.backgroundImage = null;
+        }
+
+        thumbnail.classList.add('drop-zone--dropped')
+
+
+
+
+
     }
 
     return (
@@ -54,6 +87,58 @@ function AuthCard({toggle}){
                     handleSubmit(event)
                 }}
             >
+                <div
+                    className={'drop-zone '}
+                    onDragOver={(event)=>{
+                        event.preventDefault()
+                        event.target.classList.add('drop-zone--over')
+
+                    }}
+                    onDragLeave={(event)=>{
+                        event.preventDefault()
+                        event.target.classList.remove('drop-zone--over')
+
+                    }}
+                    onDrop={(event)=>{
+                        event.preventDefault()
+                        setIsUploaded(true)
+                        event.target.children[1].files = event.dataTransfer.files
+                        updateThumbnail(event.target,event.dataTransfer.files[0])
+
+                        event.target.classList.remove('drop-zone--over')
+
+
+                    }}
+                    onClick={(event)=>{
+                        const fileInput = document.getElementById('file-input')
+                        fileInput.click()
+
+                    }}
+                >
+                    {!isUploaded && <span
+                        className="drop-zone__prompt"
+                    >
+                        Drop file here or click to upload
+                    </span>}
+                    <input
+                        type='file'
+                        name='avatar'
+                        id='file-input'
+                        className='drop-zone__input'
+                        onChange={(event)=>{
+
+                            const dropZoneElement = event.target.parentNode
+                            console.log(dropZoneElement)
+                            if(event.target.files.length){
+                                setIsUploaded(true)
+                                updateThumbnail(dropZoneElement,event.target.files[0])
+                                console.log(event.target.value,event.target.files)
+                            }
+
+                        }}
+                    />
+
+                </div>
                 <input
                     className='login-input'
                     type='text'
@@ -97,14 +182,19 @@ function AuthCard({toggle}){
                     Create Account
                 </button>
             </form>
-            <Link
+            <span
                 onClick={toggle}
                 className='tertiary-button'
             >
                 Already have an account?
-            </Link>
+            </span>
         </div>
     )
 }
 
-export default AuthCard;
+function mapStateToProps(state){
+    return state
+
+}
+
+export default connect(mapStateToProps)(AuthCard);

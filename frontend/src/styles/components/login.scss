@@ -14,3 +14,64 @@
   justify-content: center;
   align-items: center;
 }
+
+//file picker
+
+.drop-zone {
+  margin:20px;
+  width:200px;
+  height:200px;
+  //padding:25px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #c4c4c4;
+  background-image: url(../img/avatar-placeholder.jpg);
+  background-size:cover;
+  border:1px dashed #c4c4c4;
+  cursor:pointer;
+  border-radius:50%;
+
+}
+
+.drop-zone--over {
+  border:3px solid rebeccapurple;
+
+}
+
+.drop-zone--dropped {
+  border:3px solid #c4c4c4;
+}
+
+.drop-zone__prompt {
+
+
+}
+
+.drop-zone__input {
+  display:none
+}
+
+.drop-zone__thumb {
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  overflow:hidden;
+  background-color: blue;
+  background-size:cover;
+  position:relative;
+}
+
+//.drop-zone__thumb::after {
+//  content: attr(data-label);
+//  position:absolute;
+//  bottom:0;
+//  left:0;
+//  width:100%;
+//  padding:5px 0;
+//  color:white;
+//  background:rgba(0,0,0,0.75);
+//  font-size:14px;
+//  text-align: center;
+//}

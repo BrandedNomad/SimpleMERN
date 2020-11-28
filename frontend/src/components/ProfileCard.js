@@ -1,8 +1,9 @@
 import React,{useState} from 'react';
-import {Link} from "react-router-dom";
-import ReactDOM from 'react-dom'
+import {connect} from 'react-redux';
+import {handleLogout} from "../store/actions/loginAction";
 
 import Modal from "./Modal";
+
 
 const userProfile = {
     name:'John Doe',
@@ -10,7 +11,7 @@ const userProfile = {
     avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
 }
 
-function ProfileCard(){
+function ProfileCard({uid,token,dispatch}){
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -26,7 +27,7 @@ function ProfileCard(){
                     <img
                         className='profilecard-avatar_img'
                         src={userProfile.avatar}
-                        alt='profile-image'
+                        alt='profile-avatar'
                     />
                 </div>
                 <div className='profilecard-content-container'>
@@ -45,15 +46,18 @@ function ProfileCard(){
                     <div className='profilecard-button-container'>
                         <button
                             className='primary-button'
+                            onClick={()=>{
+                                dispatch(handleLogout(token,uid))
+                            }}
                         >
                             Logout
                         </button>
-                        <Link
+                        <span
                             onClick={handleToggleModal}
                             className='tertiary-button'
                         >
                             Delete
-                        </Link>
+                        </span>
                     </div>
 
                 </div>
@@ -65,5 +69,11 @@ function ProfileCard(){
     )
 }
 
+function mapStateToProps({uid,token}){
+    return {
+        uid,
+        token
+    }
+}
 
-export default ProfileCard;
+export default connect(mapStateToProps)(ProfileCard);

@@ -1,7 +1,16 @@
-import React from 'react';
-import {Link} from 'react-router-dom'
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom'
 
-function Modal({toggle}){
+import {handleDelete} from "../store/actions/loginAction";
+
+function Modal({toggle,token,dispatch}){
+
+    const [isDeleted, setIsDeleted] = useState(undefined)
+
+    if(isDeleted !== undefined){
+        return <Redirect to={'/'}/>
+    }
 
     return (
 
@@ -17,15 +26,18 @@ function Modal({toggle}){
                     </p>
                     <button
                         className='primary-button'
+                        onClick={()=>{
+                            dispatch(handleDelete(token,setIsDeleted))
+                        }}
                     >
                         Delete
                     </button>
-                    <Link
+                    <span
                         onClick={toggle}
                         className='tertiary-button'
                     >
                         Cancel
-                    </Link>
+                    </span>
                 </div>
             </div>
 
@@ -34,4 +46,12 @@ function Modal({toggle}){
     )
 }
 
-export default Modal;
+function mapStateToProps({uid,token},{toggle}){
+    return {
+        uid,
+        token,
+        toggle
+    }
+}
+
+export default connect(mapStateToProps)(Modal);

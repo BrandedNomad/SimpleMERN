@@ -1,10 +1,14 @@
 import React,{useState} from 'react';
-import {Link} from "react-router-dom";
+import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {handleLogin} from "../store/actions/loginAction";
 
-function LoginCard({toggle}){
+
+function LoginCard({toggle,dispatch,state}){
 
     let [email,setEmail] = useState('')
     let [password, setPassword]= useState('')
+    let [isLoggedIn,setIsLoggedIn] = useState(undefined)
 
     const handleEmailChange = (event) =>{
         event.preventDefault()
@@ -18,12 +22,12 @@ function LoginCard({toggle}){
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        const logDetails = {
-            email,
-            password
-        }
+        dispatch(handleLogin(email,password,setIsLoggedIn))
 
-        console.log(logDetails.email,logDetails.password)
+    }
+
+    if(isLoggedIn !== undefined){
+        return <Redirect to={'/profile'}/>
     }
 
     return (
@@ -59,14 +63,21 @@ function LoginCard({toggle}){
                     Login
                 </button>
             </form>
-            <Link
+            <span
                 onClick={toggle}
                 className='tertiary-button'
             >
                 Don't have an account?
-            </Link>
+            </span>
         </div>
     )
 }
 
-export default LoginCard;
+function mapStateToProps(state,{toggle}){
+    return {
+        state,
+        toggle
+    }
+}
+
+export default connect(mapStateToProps)(LoginCard);
