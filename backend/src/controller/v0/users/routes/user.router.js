@@ -73,7 +73,6 @@ router.post('/logout', auth, async(req,res)=>{
 
 //deletes user
 router.delete('/delete',auth,async(req,res)=>{
-    console.log(req.user._id)
     try{
 
         const deletedUser = await User.findByIdAndDelete(req.user._id)

@@ -1,9 +1,7 @@
 import React,{useState} from 'react';
-import {createAccount} from "../api/api";
+import {handleAccountCreation} from '../store/actions/loginAction'
 import {Redirect} from "react-router-dom";
 import {connect} from 'react-redux'
-
-import {loginAction} from "../store/actions/loginAction";
 
 function AuthCard({toggle,dispatch}){
 
@@ -12,6 +10,8 @@ function AuthCard({toggle,dispatch}){
     let [confirmPassword, setconfirmPassword] = useState('')
     let [name,setName] = useState('')
     let [user, setUser]= useState(undefined)
+    let [avatarImage,setAvatarImage] = useState({})
+    let [isUploaded,setIsUploaded] = useState(false)
 
     const handleEmailChange = (event) =>{
         event.preventDefault()
@@ -37,13 +37,7 @@ function AuthCard({toggle,dispatch}){
         event.preventDefault()
 
         if(confirmPassword === password){
-            createAccount(name,email,password,(result)=>{
-                setUser(result)
-                console.log(result)
-                dispatch(loginAction(result.user._id,result.token))
-            }).catch((error)=>{
-                console.log(error)
-            })
+            dispatch(handleAccountCreation(name,email,password,setUser))
 
         }else{
             alert("Passwords don't match")
@@ -52,8 +46,37 @@ function AuthCard({toggle,dispatch}){
     }
 
     if(user !== undefined){
-        console.log(user)
         return <Redirect to={'/profile'}/>
+    }
+
+    const updateThumbnail=(dropZoneElement,file)=>{
+        setAvatarImage(file)
+
+        const thumbnailElement = document.createElement('div')
+        thumbnailElement.classList.add('drop-zone__thumb')
+
+        dropZoneElement.appendChild(thumbnailElement)
+
+        const thumbnail = dropZoneElement.children[2]
+
+
+        //show thumbnail for image files
+        if(file.type.startsWith("image/")){
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                thumbnail.style.backgroundImage = `url('${reader.result}')`
+            }
+        } else {
+            thumbnail.style.backgroundImage = null;
+        }
+
+        thumbnail.classList.add('drop-zone--dropped')
+
+
+
+
+
     }
 
     return (
@@ -64,6 +87,58 @@ function AuthCard({toggle,dispatch}){
                     handleSubmit(event)
                 }}
             >
+                <div
+                    className={'drop-zone '}
+                    onDragOver={(event)=>{
+                        event.preventDefault()
+                        event.target.classList.add('drop-zone--over')
+
+                    }}
+                    onDragLeave={(event)=>{
+                        event.preventDefault()
+                        event.target.classList.remove('drop-zone--over')
+
+                    }}
+                    onDrop={(event)=>{
+                        event.preventDefault()
+                        setIsUploaded(true)
+                        event.target.children[1].files = event.dataTransfer.files
+                        updateThumbnail(event.target,event.dataTransfer.files[0])
+
+                        event.target.classList.remove('drop-zone--over')
+
+
+                    }}
+                    onClick={(event)=>{
+                        const fileInput = document.getElementById('file-input')
+                        fileInput.click()
+
+                    }}
+                >
+                    {!isUploaded && <span
+                        className="drop-zone__prompt"
+                    >
+                        Drop file here or click to upload
+                    </span>}
+                    <input
+                        type='file'
+                        name='avatar'
+                        id='file-input'
+                        className='drop-zone__input'
+                        onChange={(event)=>{
+
+                            const dropZoneElement = event.target.parentNode
+                            console.log(dropZoneElement)
+                            if(event.target.files.length){
+                                setIsUploaded(true)
+                                updateThumbnail(dropZoneElement,event.target.files[0])
+                                console.log(event.target.value,event.target.files)
+                            }
+
+                        }}
+                    />
+
+                </div>
                 <input
                     className='login-input'
                     type='text'

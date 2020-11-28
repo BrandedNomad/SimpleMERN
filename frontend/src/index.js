@@ -3,11 +3,28 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {createStore} from "redux";
+import authReducer from "./store/reducers/authReducer";
+import middleware from "./store/middleware"
+import {Provider} from 'react-redux'
+import {loadFromLocalStorage, saveToLocalStorage} from "./utils/localStorage";
+
+const persistedState = loadFromLocalStorage()
+
+const store = createStore(
+    authReducer,
+    persistedState,
+    middleware
+);
+
+store.subscribe(()=>{
+    saveToLocalStorage(store.getState())
+})
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

@@ -1,31 +1,40 @@
 import {BrowserRouter, Route} from "react-router-dom";
-import React,{useEffect} from 'react';
+import React from 'react';
 import LoginPage from "./components/LoginPage";
 import ProfileCard from "./components/ProfileCard";
-import {createStore,applyMiddleware} from "redux";
-import {Provider} from "react-redux";
+import {connect} from 'react-redux'
 
-import authReducer from "./store/reducers/authReducer";
 import './styles/styles.scss';
-import logger from "./store/middleware/logger";
 
-const store = createStore(authReducer,applyMiddleware(logger))
 
-function App() {
+function App({isAuthenticated,...props}) {
+
+ console.log("first",isAuthenticated)
 
 
 
   return (
-      <Provider store={store}>
-          <div className="App">
-              <BrowserRouter>
-                  <Route exact path={'/'} component={LoginPage}/>
-                  <Route path={'/profile'} component={ProfileCard}/>
-              </BrowserRouter>
-          </div>
-      </Provider>
+      <div className="App">
+          <BrowserRouter>
+              <Route exact path={'/'} component={LoginPage}/>
+              <Route path={'/profile'} render={(props)=>{
+                  console.log("inside:",props)
+                  return isAuthenticated ? (<ProfileCard {...props}/>):(<LoginPage {...props}/>)
+              }}/>
+          </BrowserRouter>
+      </div>
 
   );
 }
 
-export default App;
+
+function mapStateToProps(state){
+
+    console.log("insideMapStateToProps: ",state)
+    return {
+        isAuthenticated:!!state.token
+    }
+}
+
+
+export default connect(mapStateToProps)(App);
