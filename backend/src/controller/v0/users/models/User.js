@@ -1,3 +1,9 @@
+/**
+ * @overview this file contains the User model (ORM)
+ *
+ */
+
+//imports
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
@@ -25,7 +31,7 @@ const userSchema  = mongoose.Schema({
         type:String,
         required:true,
         trim:true,
-        min:8,
+        min:6,
         validate(value){
             if(value.toLowerCase().includes("password") || value.toLowerCase().includes(this.name)){
                 throw new Error('Password cannot be "password" or your name!')
@@ -48,7 +54,7 @@ const userSchema  = mongoose.Schema({
 
 //instance methods
 
-//returns only public data
+//Hides sensitive data by returning only public data
 userSchema.methods.toJSON = function(){
     const user = this;
     const publicUserInfo = user.toObject();
@@ -104,6 +110,8 @@ userSchema.pre('save', async function(next){
     next()
 })
 
+//Creates the User Model
 const User = mongoose.model('User',userSchema)
 
+//exports
 module.exports = User;

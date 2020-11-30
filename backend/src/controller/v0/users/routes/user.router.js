@@ -1,3 +1,8 @@
+/**
+ *@overview This file contains all the endpoints for the User route
+ */
+
+//imports
 const Express = require('express')
 const User = require('../models/User')
 const ModelV0 = require("../../index.model")
@@ -17,10 +22,10 @@ router.post("/register", async (req,res)=>{
     //Check if user already exist
     const doesExist = await ModelV0.User.findByCredentials(userProvided.email,userProvided.password)
 
+    //instantiate new User
     let user;
     let token;
     let signedURL;
-    //instantiate new User
     if(doesExist === false){
 
         //create user
@@ -29,13 +34,13 @@ router.post("/register", async (req,res)=>{
         //create a token
         token = await user.generateAuthToken()
 
-        //request put url
+        //request a signed put url from AWS file store
         signedURL = getPutSignedUrl(req.body.avatar)
 
         //send results
         res.status(200).send({user,token,signedURL})
     } else {
-        res.status(400).send("User not found")
+        res.status(404).send("User not found")
     }
 
 })
@@ -57,16 +62,20 @@ router.post("/auth",async (req,res)=>{
 
 })
 
-//Gets a user by id
+//Gets a user's profile once logged in
 router.get('/profile',auth,async (req,res)=>{
-    const user = req.user
-    console.log("profileRoute", user)
-    //const user = await ModelV0.User.findOne({_id})
-    if(user !== undefined){
-        const signedURL = getSignedUrl(user.avatar)
-        console.log("profileSigned", signedURL)
 
-        res.send({user,signedURL})
+    //gets the authorized user
+    const user = req.user
+
+    //if user exists
+    if(user !== undefined){
+
+        //requests a signed URL form AWS filestore that will be used to display the user profile image
+        const signedURL = getSignedUrl(user.avatar)
+        res.status(200).send({user,signedURL})
+    }else{
+        res.status(404).send("User not found")
     }
 
 })
@@ -75,16 +84,16 @@ router.get('/profile',auth,async (req,res)=>{
 router.post('/logout', auth, async(req,res)=>{
 
     try{
+        //removes the session token from users list of tokens
         req.user.tokens = req.user.tokens.filter((token)=>{
             return token.token !== req.token
         })
 
         await req.user.save()
 
-        res.send("successfully logged out")
+        res.status(200).send("successfully logged out")
     }catch(error){
-        res.status(500).send()
-
+        res.status(500).send("Unable to logout.")
     }
 })
 
@@ -92,18 +101,23 @@ router.post('/logout', auth, async(req,res)=>{
 router.delete('/delete',auth,async(req,res)=>{
     try{
 
-        deleteFiles(req.user.avatar)
+        //Delete profile image from AWS file store
+        deleteFiles(req.user.avatar);
+
+        //Deletes user info from User database
         const deletedUser = await User.findByIdAndDelete(req.user._id)
+
+
         if(!deletedUser){
-            res.status(404).send()
+            res.status(404).send("Unable to delete account")
         }
 
         res.status(200).send(deletedUser)
 
     }catch(error){
-        res.status(500).send()
+        res.status(500).send("Server Error")
     }
 })
 
-
+//exports
 module.exports = router;

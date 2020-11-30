@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -r dotenv/config src/server.js"
+    "dev": "nodemon -r dotenv/config src/server.js",
+    "clean": "rm -rf www/ || true",
+    "build": "npm run clean && mkdir www && cp package.json www/package.json && cp -r src www/src && cd www && zip -r Archive.zip . && cd ..",
+    "start": "node src/server.js"
   },
   "author": "",
   "license": "ISC",
