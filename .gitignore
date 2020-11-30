@@ -1,3 +1,10 @@
-backend/.env
-frontend/.env
-node_modules/
+./frontend/node_modules;
+./frontend/.env;
+./backend/node_modules;
+./backend/.env;
+./backend/www
+./frontend/www
+./frontend/.elasticbeanstalk
+./backend/.elasticbeanstalk
+./frontend/build
+./backend/build
