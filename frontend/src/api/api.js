@@ -3,6 +3,7 @@
 export const createAccount = async (name,email,password,avatarImage,callback)=>{
     const url = process.env.REACT_APP_API_URL + '/user/register';
     const method = 'post';
+    const mode ='no-cors'
     const headers = {
         'content-type':'application/json'
     }
@@ -141,6 +142,7 @@ export const deleteAccount = (token,callback) => {
 
 export const fileUpload = (url,file,callback)=>{
     const method = 'put';
+    const mode = 'no-cors'
     const header = {
         'Content-type': file.type
     }
